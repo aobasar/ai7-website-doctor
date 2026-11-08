@@ -1,0 +1,6 @@
+
+# AOB private notes (personal)
+AOB/
+
+# local env / secrets
+.env.local

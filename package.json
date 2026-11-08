@@ -1,0 +1,38 @@
+{
+  "name": "ai7-website-doctor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx --env-file=.env.local server/index.ts",
+    "build": "vite build",
+    "start": "NODE_ENV=production tsx --env-file-if-exists=.env.local server/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test:lab": "tsx --env-file=.env.local scripts/test-lab.ts",
+    "test:agent": "tsx --env-file=.env.local scripts/test-agent.ts",
+    "setup:agent": "node --env-file=.env.local scripts/setup-agent.mjs",
+    "make:caller": "node --env-file=.env.local scripts/make-caller.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@daytona/sdk": "^0.231.0",
+    "@elevenlabs/react": "^1.21.1",
+    "express": "^5.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.2.1",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6"
+  }
+}

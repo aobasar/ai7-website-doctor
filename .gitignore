@@ -1,0 +1,15 @@
+
+# AOB private notes (personal)
+AOB/
+
+# local env / secrets
+.env.local
+
+# Daytona lab sandbox id (local)
+.lab-sandbox
+node_modules/
+web/dist/
+
+# Local tooling
+.claude/
+.DS_Store

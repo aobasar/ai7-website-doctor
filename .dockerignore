@@ -1,0 +1,8 @@
+node_modules
+web/dist
+.env.local
+.env
+AOB
+.lab-sandbox
+.claude
+.git
