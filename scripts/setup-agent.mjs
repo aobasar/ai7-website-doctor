@@ -77,7 +77,7 @@ const body = {
       dynamic_variables: { dynamic_variable_placeholders: { issue_text: 'Website problem', site: 'shop.ai7demo.app', domain: 'ai7demo.app', revenue_per_day: '0', sla: 'none' } },
       prompt: { prompt: PROMPT, llm: process.env.MAYA_LLM || 'claude-haiku-4-5', temperature: 0.3, tools: TOOLS },
     },
-    tts: { voice_id: MAYA_VOICE },
+    tts: { voice_id: MAYA_VOICE, speed: 0.93 },
   },
 };
 

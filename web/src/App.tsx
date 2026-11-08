@@ -289,7 +289,7 @@ export function App() {
       if (mode === 'listening' && prev === 'speaking' && callerState.current.on && !callerState.current.paused) {
         callerTimer.current = setTimeout(() => {
           if (lastMode.current === 'listening' && R.current.toolsRunning === 0) void playNextCaller();
-        }, 1200);
+        }, 1800);
       }
     },
     onError: (message) => { setError(typeof message === 'string' ? message : 'Voice connection error'); },
