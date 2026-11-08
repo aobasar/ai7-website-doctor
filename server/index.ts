@@ -7,6 +7,7 @@ import { PROBES, type IssueId, type LabAction, type ProbeName } from './lab-type
 import { labAction, labStatus, runProbe } from './lab.js';
 import { createCase, getCase, recordBrowserTest, recordProbe, requestStatus } from './cases.js';
 import { getSignedUrl, HttpError } from './elevenlabs.js';
+import { installAuth } from './auth.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = Number(process.env.PORT) || 8010;
@@ -16,6 +17,8 @@ const ISSUES: IssueId[] = ['I1', 'I2', 'I3'];
 
 const app = express();
 app.use(express.json({ limit: '32kb' }));
+app.disable('x-powered-by');
+installAuth(app, express);
 
 const wrap = (fn: (req: Request, res: Response) => Promise<unknown>) => (req: Request, res: Response, next: NextFunction) =>
   fn(req, res).catch(next);
