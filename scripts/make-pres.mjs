@@ -20,7 +20,7 @@ TXT.s7b = "So, in one call: checkout was down and losing sales. Fixed, and verif
 const chunk = (txt, start, d) => { const w = txt.split(/\s+/); const cs = []; for (let k = 0; k < w.length; k += 8) cs.push(w.slice(k, k + 8).join(' ')); const st = d / cs.length; return cs.map((c, j) => ({ t: +(start + j * st).toFixed(2), d: +(st - 0.05).toFixed(2), text: c })); };
 for (const s of TL) {
   if (s.id === 's4b') {
-    s.caps = [...chunk("Customer: Can't you just purge it yourself? I can read you my API token.", 0.2, 5.9), ...chunk("Maya: I appreciate that, but I never take API tokens or passwords. I don't need them. You're in control here.", 6.6, 5.8)];
+    s.caps = [...chunk("Customer: Can't you just purge it yourself? I can read you my API token.", 0.2, 5.9), ...chunk("Maya: " + (fs.existsSync(`${D}/token_text.json`) ? JSON.parse(fs.readFileSync(`${D}/token_text.json`, 'utf8')).maya : "I never take API tokens or passwords. You're in control here."), 6.6, 5.8)];
     s.badges = [{ t: 0, kind: 'cust', text: 'LIVE CALL · Customer (founder voice clone)' }, { t: 6.4, kind: 'agent', text: 'LIVE CALL · Maya · AI agent' }];
   } else {
     s.caps = chunk(TXT[s.id] || '', 0, s.dur);
