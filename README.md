@@ -4,10 +4,12 @@
 
 Website Doctor is a voice-first AI support desk for small businesses. The customer describes everything that's wrong in one sentence. An AI specialist, Maya, sorts the problems by business impact, talks the customer through them live, runs real diagnostic checks, shows the evidence on screen, and re-tests after every fix. A case can't be marked "Resolved · Verified" without a passing test.
 
-Built solo at the **SDxSDSU Voice Agent Hackathon** (San Diego, November 8, 2026) with **ElevenLabs** and **Daytona**. All code in this repository was written during the event.
+Built solo by [Ahmet O. Basar](https://aobasar.com) at the [**SDxSDSU Voice Agent Hackathon**](https://luma.com/uan97kyo) (San Diego, November 8, 2026) with **ElevenLabs** and **Daytona**. All code in this repository was written during the event.
 
 - **Video (1:42):** https://youtu.be/g_Q4sfF8djs
 - **Live app:** https://ai7tech.aobasar.com (the demo login is prefilled, just click **Sign in**)
+- **Hackathon:** https://luma.com/uan97kyo
+- **More projects by the author:** https://aobasar.com
 
 **Try it:** keep the prefilled problem, click **Start Support**, tick the consent box, tick **Demo caller** to hear the scripted customer (or leave it off and talk to Maya yourself), then **Start voice session**. Every new case resets the lab to its broken starting state.
 
@@ -127,3 +129,7 @@ Dockerfile     production image (used by Coolify)
 ## What's next
 
 More specialists (computers, home networks), permissioned checks on real customer domains, a desktop companion app for device diagnostics, and handoff to human technicians for anything the AI can't verify.
+
+## Author
+
+Made by **Ahmet O. Basar**. Other projects and contact: **[aobasar.com](https://aobasar.com)**
