@@ -409,8 +409,16 @@ export function App() {
   const idx = ORDER.indexOf(screen);
   return (
     <>
+      <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
+        <defs>
+          <linearGradient id="gm" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#4f8dff" /><stop offset="1" stopColor="#1d4ed8" /></linearGradient>
+          <linearGradient id="gn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#2dd4bf" /><stop offset="1" stopColor="#0f766e" /></linearGradient>
+          <symbol id="maya" viewBox="0 0 132 132"><circle cx="66" cy="66" r="66" fill="url(#gm)" /><path d="M28 70c0-30 16-46 38-46s38 16 38 46v34H28z" fill="#2a1c19" /><path d="M40 132c4-20 14-28 26-28s22 8 26 28z" fill="#e8eefc" /><ellipse cx="66" cy="68" rx="25" ry="28" fill="#f6cba8" /><path d="M41 62c4-18 14-26 25-26s22 6 26 22c-10-8-22-10-30-10s-15 6-21 14z" fill="#2a1c19" /><ellipse cx="57" cy="70" rx="3.6" ry="4.4" fill="#1d1d2b" /><ellipse cx="75" cy="70" rx="3.6" ry="4.4" fill="#1d1d2b" /><circle cx="58.2" cy="68.6" r="1.2" fill="#fff" /><circle cx="76.2" cy="68.6" r="1.2" fill="#fff" /><circle cx="51" cy="79" r="4" fill="#f59ca0" opacity=".6" /><circle cx="81" cy="79" r="4" fill="#f59ca0" opacity=".6" /><path d="M59 83q7 6 14 0" stroke="#7a2e2e" strokeWidth="2.6" fill="none" strokeLinecap="round" /><path d="M34 66a32 32 0 0 1 64 0" stroke="#3b82f6" strokeWidth="6" fill="none" /><rect x="27" y="62" width="12" height="20" rx="6" fill="#3b82f6" /><rect x="93" y="62" width="12" height="20" rx="6" fill="#3b82f6" /><path d="M99 80q0 16-20 18" stroke="#3b82f6" strokeWidth="3.5" fill="none" /><circle cx="78" cy="98" r="4" fill="#3b82f6" /></symbol>
+          <symbol id="nora" viewBox="0 0 132 132"><circle cx="66" cy="66" r="66" fill="url(#gn)" /><path d="M28 72c0-32 16-48 38-48s38 16 38 48v28H28z" fill="#151515" /><path d="M40 132c4-20 14-28 26-28s22 8 26 28z" fill="#e8fbf7" /><ellipse cx="66" cy="68" rx="25" ry="28" fill="#e7b48e" /><path d="M41 60c6-16 14-24 25-24s19 8 25 24c-8-6-14-9-25-9s-17 3-25 9z" fill="#151515" /><ellipse cx="57" cy="70" rx="3.6" ry="4.4" fill="#1d1d2b" /><ellipse cx="75" cy="70" rx="3.6" ry="4.4" fill="#1d1d2b" /><circle cx="58.2" cy="68.6" r="1.2" fill="#fff" /><circle cx="76.2" cy="68.6" r="1.2" fill="#fff" /><circle cx="51" cy="79" r="4" fill="#f59ca0" opacity=".5" /><circle cx="81" cy="79" r="4" fill="#f59ca0" opacity=".5" /><path d="M59 83q7 6 14 0" stroke="#6b2a2a" strokeWidth="2.6" fill="none" strokeLinecap="round" /><path d="M34 66a32 32 0 0 1 64 0" stroke="#2dd4bf" strokeWidth="6" fill="none" /><rect x="27" y="62" width="12" height="20" rx="6" fill="#2dd4bf" /><rect x="93" y="62" width="12" height="20" rx="6" fill="#2dd4bf" /></symbol>
+        </defs>
+      </svg>
       <header className="appbar"><div className="in">
-        <div className="logo"><b>AI7 Tech Support</b><span>Website Doctor</span></div>
+        <div className="logo"><svg className="logo-ic" viewBox="0 0 34 34" fill="none" stroke="#5aa2ff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M7 4v8a7 7 0 0 0 14 0V4" /><path d="M14 19v4a6 6 0 0 0 12 0v-3" /><circle cx="26" cy="17" r="3" /></svg><b>Website Doctor</b><span>by AI7 Tech Support</span></div>
         <ol className="steps">{STEP_LABELS.map((l, i) => <li key={l} className={i === idx ? 'on' : i < idx ? 'done' : ''}>{l}</li>)}</ol>
       </div></header>
 
@@ -418,11 +426,11 @@ export function App() {
         {screen === 'intake' && (
           <section className="intake">
             <div>
-              <h1>Tech problems? Talk to an AI specialist now.</h1>
+              <h1>Tech problems? Talk to an <span className="hl">AI specialist</span> now.</h1>
               <p className="lead">Describe everything that's wrong, in your own words. We sort it by business impact and connect you with the right specialist.</p>
               <div className="cats" aria-label="Specialists">
-                <div className="cat"><span className="av">M</span><div><b>Maya · Websites, domains, email</b><span className="s">Available now</span></div><span className="chip ok">Live</span></div>
-                <div className="cat"><span className="av nora">N</span><div><b>Nora · Wi-Fi and networks</b><span className="s">Available now</span></div><span className="chip ok">Live</span></div>
+                <div className="cat"><svg className="av face"><use href="#maya" /></svg><div><b>Maya · Websites, domains, email</b><span className="s">Available now</span></div><span className="chip ok">Live</span></div>
+                <div className="cat"><svg className="av face"><use href="#nora" /></svg><div><b>Nora · Wi-Fi and networks</b><span className="s">Available now</span></div><span className="chip ok">Live</span></div>
                 <div className="cat soon"><span className="av">X</span><div><b>Max · Mac and Windows computers</b><span className="s">Coming soon</span></div></div>
               </div>
             </div>
@@ -471,7 +479,7 @@ export function App() {
         {screen === 'live' && (
           <section className="live">
             <div className={`card agent ${pill.kind}`}>
-              <span className={`av big-av ${a.cls}`}>{a.init}</span>
+              <svg className={`av big-av face ${a.cls}`}><use href={a.cls === 'nora' ? '#nora' : '#maya'} /></svg>
               <div><h2>{a.name}</h2><p className="role">{a.role}</p></div>
               <span className={`pill ${pill.kind}`}>{pill.text}</span>
               <div className="wave" aria-hidden="true"><i /><i /><i /><i /><i /></div>

@@ -88,20 +88,19 @@ function cookieOf(req: Request) {
 const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 function page(error = '') {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sign in · AI7 Tech Support</title>
+<title>Sign in · AI7 Tech Support</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap">
 <style>
-:root{--bg:#f5f7fa;--card:#fff;--ink:#0c1b33;--muted:#56647b;--line:#dde3ec;--accent:#2563eb;--bad:#b42318}
-@media (prefers-color-scheme:dark){:root{--bg:#070f1d;--card:#0f1d33;--ink:#e8eef8;--muted:#9aa8bf;--line:#1f3253;--accent:#6b9bff;--bad:#f87171}}
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font:15px/1.5 "Helvetica Neue",Arial,sans-serif;padding:16px;box-sizing:border-box}
-form{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:28px;width:100%;max-width:360px;display:grid;gap:14px}
+:root{--bg:#070f22;--card:#0f1d3d;--ink:#f3f6fc;--muted:#a3b2cf;--line:rgba(120,160,255,.22);--accent:#2f7bf6;--bad:#ef4444}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(900px 500px at 85% -10%,rgba(47,123,246,.28),transparent 60%),linear-gradient(180deg,#0b1733,#070f22);color:var(--ink);font:15px/1.5 "Plus Jakarta Sans",system-ui,sans-serif;padding:16px;box-sizing:border-box}
+form{background:linear-gradient(180deg,#13254b,#0f1d3d);border:1.5px solid var(--line);border-radius:18px;padding:30px;width:100%;max-width:360px;display:grid;gap:14px}
 h1{margin:0;font-size:1.3rem}p{margin:0;color:var(--muted);font-size:.9rem}
 label{display:grid;gap:6px;font-weight:600;font-size:.88rem}
-input{font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
-button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:11px;background:var(--accent);color:#fff;cursor:pointer}
+input{font:inherit;color:inherit;background:#0a1630;border:1.5px solid var(--line);border-radius:12px;padding:11px 13px}
+button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:12px;background:linear-gradient(180deg,#3b86ff,#2463e6);color:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(47,123,246,.35)}
 .err{color:var(--bad);font-size:.88rem}
 </style></head><body>
 <form method="post" action="/login" autocomplete="on">
-<h1>AI7 Tech Support · Website Doctor</h1><p>Demo login is prefilled. Just click Sign in.</p>
+<h1>Website Doctor</h1><p style="margin-top:-8px">by AI7 Tech Support</p><p>Demo login is prefilled. Just click Sign in.</p>
 ${error ? `<div class="err" role="alert">${esc(error)}</div>` : ''}
 <label for="u">Username<input id="u" name="username" autocomplete="username" value="${esc(USER)}" required></label>
 <label for="p">Password<input id="p" name="password" type="password" autocomplete="current-password" value="${esc(PREFILL_PASS)}" required></label>
