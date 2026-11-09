@@ -6,17 +6,21 @@ import json, re, subprocess, sys, pathlib, datetime
 rec, cid = sys.argv[1], sys.argv[2]
 V = pathlib.Path("AOB/video"); P = V / "pres"
 conv = json.loads((V / f"{cid}.json").read_text())
-m = re.search(r"at (\d+)\.(\d+)\.(\d+)\D*(AM|PM)", pathlib.Path(rec).name)
-h, mi, se = int(m[1]), int(m[2]), int(m[3]); h = h % 12 + (12 if m[4] == "PM" else 0)
-call_start = datetime.datetime.fromtimestamp(conv["metadata"]["start_time_unix_secs"])
-rec_start = call_start.replace(hour=h, minute=mi, second=se)
-OFF = (call_start - rec_start).total_seconds() + 0.4  # first agent line shows ~0.4 s after call start
+if rec.endswith(".webm"):
+    # Playwright recording: offset measured by scripts/record-demo.mjs, no window to crop.
+    OFF = json.loads((V / "demo-rec" / "meta.json").read_text())["callOffset"]
+else:
+    m = re.search(r"at (\d+)\.(\d+)\.(\d+)\D*(AM|PM)", pathlib.Path(rec).name)
+    h, mi, se = int(m[1]), int(m[2]), int(m[3]); h = h % 12 + (12 if m[4] == "PM" else 0)
+    call_start = datetime.datetime.fromtimestamp(conv["metadata"]["start_time_unix_secs"])
+    rec_start = call_start.replace(hour=h, minute=mi, second=se)
+    OFF = (call_start - rec_start).total_seconds() + 0.4  # first agent line shows ~0.4 s after call start
 print("offset", OFF)
 
 msgs = [x for x in conv["transcript"] if (x.get("message") or "").strip() and x["message"].strip() != "..."]
 users = [x["time_in_call_secs"] for x in msgs if x["role"] == "user"]
 nora = next(x["time_in_call_secs"] for x in msgs if x["role"] == "agent" and x["message"].startswith("Hi, I'm Nora"))
-CROP = "crop=2511:1412:204:380,scale=1920:1080,fps=30,setsar=1"
+CROP = ("crop=1260:709:170:0,scale=1920:1080,fps=30,setsar=1" if rec.endswith(".webm") else "crop=2455:1381:232:396,scale=1920:1080,fps=30,setsar=1")
 
 def cut(a, d, speed, out):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", f"{a + OFF:.2f}", "-t", f"{d:.2f}", "-i", rec, "-vf", f"{CROP},setpts=PTS/{speed:.3f}", "-an",
