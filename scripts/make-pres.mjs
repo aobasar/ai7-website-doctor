@@ -28,7 +28,7 @@ for (const s of TL) {
   const firstSp = words[0]?.sp;
   words.forEach((w, i) => {
     const who = s.id === 's4b' ? (w.sp === firstSp ? 'Customer' : 'Maya') : 'Narrator';
-    if (!cur || cur.words.length >= 7 || (cur.who !== who) || (/[.?!]$/.test(words[i - 1]?.w || '') && cur.words.length >= 3)) {
+    if (!cur || cur.words.length >= 9 || (cur.who !== who) || (/[.?!]$/.test(words[i - 1]?.w || '') && cur.words.length >= 3)) {
       cur = { t: w.s, who, words: [] }; caps.push(cur);
     }
     cur.words.push({ w: w.w, t: +w.s.toFixed(2) });
