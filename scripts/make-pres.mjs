@@ -18,12 +18,28 @@ const voiceSrc = fs.readFileSync('scripts/make-pres-voice.mjs', 'utf8');
 const TXT = {}; for (const m of voiceSrc.matchAll(/\['(s\d)', "([^"]+)"\]/g)) TXT[m[1]] = m[2].replace(/\[[^\]]+\]\s*/g, '');
 TXT.s7b = "So, in one call: checkout was down and losing sales. Fixed, and verified, in under a minute. Order emails were landing in spam. The records are fixed and re-checked. And the Wi-Fi was measured honestly, and escalated with evidence. No hold music. No guesswork.";
 const chunk = (txt, start, d) => { const w = txt.split(/\s+/); const cs = []; for (let k = 0; k < w.length; k += 8) cs.push(w.slice(k, k + 8).join(' ')); const st = d / cs.length; return cs.map((c, j) => ({ t: +(start + j * st).toFixed(2), d: +(st - 0.05).toFixed(2), text: c })); };
+const FIX = { Ahmed: 'Ahmet', "Ahmed,": 'Ahmet,', "Ahmed.": 'Ahmet.', tech: 'Tech', support: 'Support', 'support.': 'Support.' };
 for (const s of TL) {
+  const wf = `${D}/words_${s.id}.json`;
+  const words = fs.existsSync(wf) ? JSON.parse(fs.readFileSync(wf, 'utf8')) : [];
+  if (s.id === 's8') words.forEach((w, i) => { if (i < 3 && FIX[w.w]) w.w = FIX[w.w]; });
+  words.forEach((w) => { if (/^Ahmed/.test(w.w)) w.w = w.w.replace('Ahmed', 'Ahmet'); });
+  const caps = []; let cur = null;
+  const firstSp = words[0]?.sp;
+  words.forEach((w, i) => {
+    const who = s.id === 's4b' ? (w.sp === firstSp ? 'Customer' : 'Maya') : '';
+    if (!cur || cur.words.length >= 7 || (cur.who !== who) || (/[.?!]$/.test(words[i - 1]?.w || '') && cur.words.length >= 3)) {
+      cur = { t: w.s, who, words: [] }; caps.push(cur);
+    }
+    cur.words.push({ w: w.w, t: +w.s.toFixed(2) });
+    cur.end = w.e;
+  });
+  caps.forEach((c, i) => { c.d = +(((caps[i + 1]?.t ?? c.end + 0.4) - c.t) - 0.02).toFixed(2); c.t = +c.t.toFixed(2); });
+  s.caps = caps;
   if (s.id === 's4b') {
-    s.caps = [...chunk("Customer: Can't you just purge it yourself? I can read you my API token.", 0.2, 5.9), ...chunk("Maya: " + (fs.existsSync(`${D}/token_text.json`) ? JSON.parse(fs.readFileSync(`${D}/token_text.json`, 'utf8')).maya : "I never take API tokens or passwords. You're in control here."), 6.6, 5.8)];
-    s.badges = [{ t: 0, kind: 'cust', text: 'LIVE CALL · Customer (founder voice clone)' }, { t: 6.4, kind: 'agent', text: 'LIVE CALL · Maya · AI agent' }];
+    const mayaAt = caps.find((c) => c.who === 'Maya')?.t ?? 6.4;
+    s.badges = [{ t: 0, kind: 'cust', text: 'LIVE CALL · Customer (founder voice clone)' }, { t: mayaAt, kind: 'agent', text: 'LIVE CALL · Maya · AI agent' }];
   } else {
-    s.caps = chunk(TXT[s.id] || '', 0, s.dur);
     s.badges = ['s4', 's5'].includes(s.id) ? [{ t: 0, kind: 'live', text: 'LIVE DEMO footage · narration: Ahmet' }] : [{ t: 0, kind: '', text: 'Ahmet · narration' }];
   }
 }
