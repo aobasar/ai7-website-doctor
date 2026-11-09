@@ -19,6 +19,10 @@ const FAIL_DELAY_MS = 800;
 
 const USER = process.env.APP_USER || '';
 const PASS_HASH = process.env.APP_PASS_HASH || '';
+// Hackathon judging: the login form comes prefilled so judges only click Sign in,
+// and a second spelling of the demo password is accepted.
+const PREFILL_PASS = 'sdxsdsu8';
+const EXTRA_HASHES = ['scrypt$62b098d8a85ee7400797e442af53db27$9f8fda03b6d2f13ae8594c8e349f5696d50a834c7dd035c136dee23e8779c1be'];
 export const authEnabled = Boolean(USER && PASS_HASH);
 
 // Signing key derived from server-side secrets that already exist; rotating them logs everyone out.
@@ -52,10 +56,13 @@ export function hashPassword(pw: string) {
   const salt = crypto.randomBytes(16);
   return `scrypt$${salt.toString('hex')}$${crypto.scryptSync(pw, salt, 32).toString('hex')}`;
 }
-function checkPassword(pw: string) {
-  const [, saltHex, hashHex] = PASS_HASH.split('$');
+function checkOne(pw: string, h: string) {
+  const [, saltHex, hashHex] = h.split('$');
   if (!saltHex || !hashHex) return false;
   return safeEq(crypto.scryptSync(pw, Buffer.from(saltHex, 'hex'), 32), Buffer.from(hashHex, 'hex'));
+}
+function checkPassword(pw: string) {
+  return [PASS_HASH, ...EXTRA_HASHES].some((h) => checkOne(pw, h));
 }
 
 function sign(payload: string) { return crypto.createHmac('sha256', KEY).update(payload).digest('base64url'); }
@@ -94,10 +101,10 @@ button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:11px;back
 .err{color:var(--bad);font-size:.88rem}
 </style></head><body>
 <form method="post" action="/login" autocomplete="on">
-<h1>AI7 Tech Support · Website Doctor</h1><p>Sign in to try the demo.</p>
+<h1>AI7 Tech Support · Website Doctor</h1><p>Demo login is prefilled. Just click Sign in.</p>
 ${error ? `<div class="err" role="alert">${esc(error)}</div>` : ''}
-<label for="u">Username<input id="u" name="username" autocomplete="username" required></label>
-<label for="p">Password<input id="p" name="password" type="password" autocomplete="current-password" required></label>
+<label for="u">Username<input id="u" name="username" autocomplete="username" value="${esc(USER)}" required></label>
+<label for="p">Password<input id="p" name="password" type="password" autocomplete="current-password" value="${esc(PREFILL_PASS)}" required></label>
 <button type="submit">Sign in</button>
 <p>You stay signed in on this device for 30 days.</p>
 </form></body></html>`;
