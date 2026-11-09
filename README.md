@@ -6,12 +6,12 @@ Website Doctor is a voice-first AI support desk for small businesses. The custom
 
 Built solo by [Ahmet O. Basar](https://aobasar.com) at the [**SDxSDSU Voice Agent Hackathon**](https://luma.com/uan97kyo) (San Diego, November 8, 2026) with **ElevenLabs** and **Daytona**. All code in this repository was written during the event.
 
-- **Video (1:42):** https://youtu.be/g_Q4sfF8djs
-- **Live app:** https://ai7tech.aobasar.com (the demo login is prefilled, just click **Sign in**)
+- **▶ Watch the demo (1:42):** https://youtu.be/g_Q4sfF8djs
+- **Live app:** currently offline. The video shows the full flow; the hosted demo can be brought back on request via [aobasar.com](https://aobasar.com).
 - **Hackathon:** https://luma.com/uan97kyo
 - **More projects by the author:** https://aobasar.com
 
-**Try it:** keep the prefilled problem, click **Start Support**, tick the consent box, tick **Demo caller** to hear the scripted customer (or leave it off and talk to Maya yourself), then **Start voice session**. Every new case resets the lab to its broken starting state.
+**Try it locally** (see [Run it](#run-it)): keep the prefilled problem, click **Start Support**, tick the consent box, tick **Demo caller** to hear the scripted customer (or leave it off and talk to Maya yourself), then **Start voice session**. Every new case resets the lab to its broken starting state.
 
 ## The demo case
 
@@ -87,7 +87,7 @@ On the review screen, **Demo caller** plays the scripted caller lines instead of
 
 ## Deploy
 
-The hosted demo runs from the `Dockerfile` on a Coolify server behind Cloudflare. Environment variables:
+The hosted demo ran (and can run again) from the `Dockerfile` on a Coolify server behind Cloudflare. It is offline for now. Environment variables:
 
 | Variable | Purpose |
 |---|---|
@@ -96,7 +96,7 @@ The hosted demo runs from the `Dockerfile` on a Coolify server behind Cloudflare
 | `LAB_SANDBOX_ID` | reuse one long-lived lab sandbox (auto-stop disabled) instead of booting a new one |
 | `APP_USER`, `APP_PASS_HASH` | login gate (`scrypt$salt$hash`); without them the gate is off |
 
-The login gate (`server/auth.ts`) has per-IP and per-user lockout, a fixed delay on failed attempts, timing-safe comparisons and an HMAC-signed HttpOnly session cookie that lasts 30 days. For judging, the login form comes prefilled.
+The login gate (`server/auth.ts`) has per-IP and per-user lockout, a fixed delay on failed attempts, timing-safe comparisons and an HMAC-signed HttpOnly session cookie that lasts 30 days. During judging, the login form came prefilled.
 
 ## Video pipeline
 
