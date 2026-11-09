@@ -6,6 +6,11 @@ Website Doctor is a voice-first AI support desk for small businesses. The custom
 
 Built solo at the **SDxSDSU Voice Agent Hackathon** (San Diego, November 8, 2026) with **ElevenLabs** and **Daytona**. All code in this repository was written during the event.
 
+- **Video (1:42):** https://youtu.be/g_Q4sfF8djs
+- **Live app:** https://ai7tech.aobasar.com (the demo login is prefilled, just click **Sign in**)
+
+**Try it:** keep the prefilled problem, click **Start Support**, tick the consent box, tick **Demo caller** to hear the scripted customer (or leave it off and talk to Maya yourself), then **Start voice session**. Every new case resets the lab to its broken starting state.
+
 ## The demo case
 
 A store owner moved to a new office internet connection and writes:
@@ -76,7 +81,29 @@ npm run dev                  # http://localhost:8010
 
 The first request boots the Daytona lab (about 8 seconds). Each new case resets the lab to its broken starting state.
 
-On the review screen, **Demo caller** plays the scripted caller lines instead of using the microphone.
+On the review screen, **Demo caller** plays the scripted caller lines instead of using the microphone. The caller's lines are generated from the founder's own ElevenLabs voice clone (`npm run make:caller`); Maya's and Nora's side of every call is live.
+
+## Deploy
+
+The hosted demo runs from the `Dockerfile` on a Coolify server behind Cloudflare. Environment variables:
+
+| Variable | Purpose |
+|---|---|
+| `ELEVENLABS_API_KEY`, `ELEVENLABS_AGENT_ID` | live agent and signed URLs |
+| `DAYTONA_API_KEY`, `DAYTONA_API_URL`, `DAYTONA_TARGET` | Daytona sandboxes |
+| `LAB_SANDBOX_ID` | reuse one long-lived lab sandbox (auto-stop disabled) instead of booting a new one |
+| `APP_USER`, `APP_PASS_HASH` | login gate (`scrypt$salt$hash`); without them the gate is off |
+
+The login gate (`server/auth.ts`) has per-IP and per-user lockout, a fixed delay on failed attempts, timing-safe comparisons and an HMAC-signed HttpOnly session cookie that lasts 30 days. For judging, the login form comes prefilled.
+
+## Video pipeline
+
+The pitch video is produced from code, no screen recording by hand:
+
+1. `scripts/record-demo.mjs` drives the hosted app in headless Chrome (Playwright) through a full live call and records it.
+2. `scripts/remake-clips.py` cuts the demo clips from that recording and the call audio fetched with `scripts/fetch-conversation.mjs`.
+3. `scripts/make-pres-voice.mjs` narrates each chapter with ElevenLabs TTS; `scripts/stt-words.mjs` gets word timestamps from Scribe for word-by-word captions.
+4. `scripts/make-pres.mjs` records the animated slides (`scripts/pitch-template.html`) with the clips, captions and speaker labels into the final MP4.
 
 ## Tests
 
@@ -90,10 +117,11 @@ npm run typecheck
 ## Project layout
 
 ```
-server/        Express API, case state machine, Daytona lab client
+server/        Express API, case state machine, Daytona lab client, login gate
 lab/           lab_server.py: origin, caching edge proxy, DNS server (runs in Daytona)
 web/           React app; web/public/caller/ holds the demo caller clips
-scripts/       agent setup, caller clip generation, tests, Daytona network spikes
+scripts/       agent setup, caller clips, tests, demo recorder, video pipeline, Daytona spikes
+Dockerfile     production image (used by Coolify)
 ```
 
 ## What's next
