@@ -9,7 +9,7 @@ const D = 'AOB/video/pres';
 const dur = (f) => Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString());
 const GAP = 0.45, LEAD = 0.8;
 // scene id, audio file
-const ORDER = [['s1', 's1.mp3'], ['s2', 's2.mp3'], ['s3', 's3.mp3'], ['s4', 's4.mp3'], ['s4b', 'token.wav'], ['s5', 's5.mp3'], ['s6', 's6.mp3'], ['s7', 's7.mp3'], ['s7b', 's7b.mp3'], ['s8', 's8.mp3']];
+const ORDER = [['s1', 's1.mp3'], ['s2', 's2.mp3'], ['s3', 's3.mp3'], ['s4', 's4.mp3'], ['s4b', 'token.wav'], ['s5', 's5.mp3'], ['s6', 's6.mp3'], ['s7b', 's7b.mp3'], ['s8', 's8.mp3']];
 let t = LEAD;
 const TL = ORDER.map(([id, a]) => { const d = dur(`${D}/${a}`); const s = { id, audio: a, start: +t.toFixed(2), dur: d }; t += d + GAP; return s; });
 const total = t + 1.5;
@@ -27,7 +27,7 @@ for (const s of TL) {
   const caps = []; let cur = null;
   const firstSp = words[0]?.sp;
   words.forEach((w, i) => {
-    const who = s.id === 's4b' ? (w.sp === firstSp ? 'Customer' : 'Maya') : '';
+    const who = s.id === 's4b' ? (w.sp === firstSp ? 'Customer' : 'Maya') : 'Narrator';
     if (!cur || cur.words.length >= 7 || (cur.who !== who) || (/[.?!]$/.test(words[i - 1]?.w || '') && cur.words.length >= 3)) {
       cur = { t: w.s, who, words: [] }; caps.push(cur);
     }
@@ -38,9 +38,9 @@ for (const s of TL) {
   s.caps = caps;
   if (s.id === 's4b') {
     const mayaAt = caps.find((c) => c.who === 'Maya')?.t ?? 6.4;
-    s.badges = [{ t: 0, kind: 'cust', text: 'LIVE CALL · Customer (founder voice clone)' }, { t: mayaAt, kind: 'agent', text: 'LIVE CALL · Maya · AI agent' }];
+    s.badges = [{ t: 0, kind: 'cust', text: 'LIVE CALL · Customer (voice clone)' }, { t: mayaAt, kind: 'agent', text: 'LIVE CALL · AI AGENT · Maya' }];
   } else {
-    s.badges = ['s4', 's5'].includes(s.id) ? [{ t: 0, kind: 'live', text: 'LIVE DEMO footage · narration: Ahmet' }] : [{ t: 0, kind: '', text: 'Ahmet · narration' }];
+    s.badges = ['s4', 's5'].includes(s.id) ? [{ t: 0, kind: 'live', text: 'LIVE DEMO footage · NARRATOR: Ahmet' }] : [{ t: 0, kind: 'narr', text: 'NARRATOR · Ahmet (founder)' }];
   }
 }
 fs.writeFileSync(`${D}/timeline.json`, JSON.stringify(TL, null, 2));
