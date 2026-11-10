@@ -6,7 +6,7 @@ Website Doctor is a voice-first AI support desk for small businesses. The custom
 
 Built solo by [Ahmet O. Basar](https://aobasar.com) at the [**SDxSDSU Voice Agent Hackathon**](https://luma.com/uan97kyo) (San Diego, November 8, 2026) with **ElevenLabs** and **Daytona**. All code in this repository was written during the event.
 
-- **▶ Watch the demo (1:42):** https://youtu.be/g_Q4sfF8djs
+- **▶ Watch the demo (1:41):** https://www.youtube.com/watch?v=TTydPMXbQtk
 - **Live app:** currently offline. The video shows the full flow; the hosted demo can be brought back on request via [aobasar.com](https://aobasar.com).
 - **Hackathon:** https://luma.com/uan97kyo
 - **More projects by the author:** https://aobasar.com
@@ -59,7 +59,7 @@ On Daytona's Tier 1 plan, sandboxes can't reach arbitrary internet hosts, which 
 
 The ElevenLabs Agents Platform runs the whole conversation: speech in and out, turn-taking, interruptions, and client tool calls that drive the UI. Intake details reach the agent as dynamic variables, so Maya opens the call already knowing the problem. The agent is created and updated from code (`scripts/setup-agent.mjs`).
 
-The demo caller's lines are generated with the founder's own ElevenLabs voice clone (`scripts/make-caller.mjs`); Maya's and Nora's side of the call is fully live.
+The demo caller's lines are generated with a stock ElevenLabs voice (`scripts/make-caller.mjs`), kept separate from the narrator's voice. Maya and Nora are one agent with two voices (ElevenLabs multi-voice): Nora's lines are tagged and spoken in her own voice. Their side of the call is fully live.
 
 ## Guardrails
 
@@ -83,7 +83,7 @@ npm run dev                  # http://localhost:8010
 
 The first request boots the Daytona lab (about 8 seconds). Each new case resets the lab to its broken starting state.
 
-On the review screen, **Demo caller** plays the scripted caller lines instead of using the microphone. The caller's lines are generated from the founder's own ElevenLabs voice clone (`npm run make:caller`); Maya's and Nora's side of every call is live.
+On the review screen, **Demo caller** plays the scripted caller lines instead of using the microphone. The caller's lines are generated with a stock ElevenLabs voice (`npm run make:caller`); Maya's and Nora's side of every call is live.
 
 ## Deploy
 

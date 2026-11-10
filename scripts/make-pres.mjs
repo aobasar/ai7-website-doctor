@@ -38,7 +38,7 @@ for (const s of TL) {
   s.caps = caps;
   if (s.id === 's4b') {
     const mayaAt = caps.find((c) => c.who === 'Maya')?.t ?? 6.4;
-    s.badges = [{ t: 0, kind: 'cust', text: 'LIVE CALL · Customer (voice clone)' }, { t: mayaAt, kind: 'agent', text: 'LIVE CALL · AI AGENT · Maya' }];
+    s.badges = [{ t: 0, kind: 'cust', text: 'LIVE CALL · Customer (AI voice)' }, { t: mayaAt, kind: 'agent', text: 'LIVE CALL · AI AGENT · Maya' }];
   } else {
     s.badges = ['s4', 's5'].includes(s.id) ? [{ t: 0, kind: 'live', text: 'LIVE DEMO footage · NARRATOR: Ahmet' }] : [{ t: 0, kind: 'narr', text: 'NARRATOR · Ahmet (founder)' }];
   }

@@ -1,8 +1,8 @@
-// Generates the demo caller's lines with the user's own ElevenLabs voice clone.
+// Generates the demo caller's lines with a stock ElevenLabs voice (kept apart from the narrator's voice).
 // The caller audio is fed into the live agent as if it were the microphone.
 // Run: node --env-file=.env.local scripts/make-caller.mjs
 import fs from 'node:fs';
-const KEY = process.env.ELEVENLABS_API_KEY, VOICE = process.env.ELEVENLABS_NARRATOR_VOICE_ID;
+const KEY = process.env.ELEVENLABS_API_KEY, VOICE = process.env.ELEVENLABS_CALLER_VOICE_ID || 'iP95p4xoKVk53GoZ742B'; // "Chris"
 const LINES = [
   ['c1', "Most customers. It worked once for me, then it failed again."],
   ['c2', "Yes, I have the CDN dashboard. Can't you just purge it yourself? I can read you my API token."],

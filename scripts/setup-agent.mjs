@@ -8,6 +8,7 @@ const KEY = process.env.ELEVENLABS_API_KEY;
 const EXISTING = process.env.ELEVENLABS_AGENT_ID;
 const API = 'https://api.elevenlabs.io/v1/convai';
 const MAYA_VOICE = process.env.MAYA_VOICE_ID || '21m00Tcm4TlvDq8ikWAM'; // premade "Rachel": calm, professional
+const NORA_VOICE = process.env.NORA_VOICE_ID || 'DODLEQrClDo8wCz460ld'; // "Lauren B": friendly, distinct from Maya
 
 const PROMPT = `You are Maya, a Web & Cloud support specialist at AI7 Tech Support, an independent AI-first tech support company. You are not affiliated with Apple, Microsoft, Google or any hosting provider. You are on a live voice call.
 
@@ -31,7 +32,7 @@ How you work: Understand, Diagnose, Act, Verify, then Resolve or Escalate.
 - Call set_current_issue when you start each issue.
 - I1: run_diagnostic dns_shop, then http_checkout. If checkout fails and the result shows x-cache HIT, run http_checkout_origin. If the origin passes, explain that the CDN is serving a saved copy of an error and ask the customer to purge /checkout in their CDN dashboard. When they say it is done, call customer_action purge_checkout_cache, then run http_checkout again. Only after it passes, call update_case_status with issue I1 and status "Resolved · Verified".
 - I2: confirm the domain, then run_diagnostic mx, spf and dmarc. If SPF does not include Google or DMARC is missing, explain it simply, call send_setup_message, and ask them to add the records. When they confirm, call customer_action fix_email_dns, then run spf and dmarc again. Resolve only if both pass; otherwise call update_case_status with "Waiting for DNS".
-- I3: call handoff_to_nora with a one-sentence summary. From then on you speak as Nora, the networking specialist: introduce yourself as Nora. Call run_browser_network_test. If it shows failures or jitter above 50 ms, explain that and ask whether they are on the 2.4 GHz or 5 GHz network. If it is clean, say honestly that the connection looks healthy right now, so the drops are intermittent, and ask which network they are on. Suggest switching to 5 GHz and forgetting the 2.4 GHz network. After they confirm, run the test again. Only call it Resolved · Verified if an earlier test failed and the new one passes; otherwise call update_case_status with "Waiting for customer" and tell them to note when the next drop happens.
+- I3: call handoff_to_nora with a one-sentence summary. From then on you speak as Nora, the networking specialist: introduce yourself as Nora. Wrap everything Nora says in <Nora>...</Nora> tags so it is spoken in Nora's own voice. Call run_browser_network_test. If it shows failures or jitter above 50 ms, explain that and ask whether they are on the 2.4 GHz or 5 GHz network. If it is clean, say honestly that the connection looks healthy right now, so the drops are intermittent, and ask which network they are on. Suggest switching to 5 GHz and forgetting the 2.4 GHz network. After they confirm, run the test again. Only call it Resolved · Verified if an earlier test failed and the new one passes; otherwise call update_case_status with "Waiting for customer" and tell them to note when the next drop happens.
 - If update_case_status is rejected, say you will verify with a fresh test first, then do it.
 - At the end, give a two-sentence recap of what is fixed and what is pending, then call end_case.
 
@@ -77,7 +78,7 @@ const body = {
       dynamic_variables: { dynamic_variable_placeholders: { issue_text: 'Website problem', site: 'shop.ai7demo.app', domain: 'ai7demo.app', revenue_per_day: '0', sla: 'none' } },
       prompt: { prompt: PROMPT, llm: process.env.MAYA_LLM || 'claude-haiku-4-5', temperature: 0.3, tools: TOOLS },
     },
-    tts: { voice_id: MAYA_VOICE, speed: 0.93 },
+    tts: { voice_id: MAYA_VOICE, speed: 0.93, supported_voices: [{ label: 'Nora', voice_id: NORA_VOICE, description: 'Nora, the networking specialist, after the handoff from Maya' }] },
   },
 };
 
@@ -103,4 +104,4 @@ if (id) {
 }
 const agent = await call('GET', `/agents/${id}`);
 const p = agent.conversation_config?.agent?.prompt || {};
-console.log('llm:', p.llm, '| tools:', (p.tools || []).map((t) => t.name).join(', ') || `(tool_ids: ${(p.tool_ids || []).length})`, '| voice:', agent.conversation_config?.tts?.voice_id);
+console.log('llm:', p.llm, '| tools:', (p.tools || []).map((t) => t.name).join(', ') || `(tool_ids: ${(p.tool_ids || []).length})`, '| voice:', agent.conversation_config?.tts?.voice_id, '| extra voices:', (agent.conversation_config?.tts?.supported_voices || []).map((v) => `${v.label}=${v.voice_id}`).join(', ') || 'none');

@@ -276,7 +276,8 @@ export function App() {
   const convRef = useRef<{ sendUserMessage: (t: string) => void } | null>(null);
   const conversation = useConversation({
     clientTools,
-    onMessage: ({ message, role }) => {
+    onMessage: ({ message: raw, role }) => {
+      const message = raw?.replace(/<\/?Nora>/g, '').trim(); // multi-voice tags from the agent
       if (!message) return;
       if (role === 'user') addMsg({ cls: 'cust', who: 'You', text: message });
       else { const a = AGENTS[R.current.agent]; addMsg({ cls: 'agent-m ' + a.cls, who: a.name, text: message }); }
@@ -471,7 +472,7 @@ export function App() {
               <dt>SLA downtime budget</dt><dd>{sla ? `${slaMonthMin.toFixed(1)} minutes per month at ${sla}%` : 'No SLA'}</dd>
             </dl>
             <label className="consent" htmlFor="consent"><input type="checkbox" id="consent" checked={consent} onChange={(e) => setConsent(e.target.checked)} /><span>I agree this voice session is transcribed and saved to my case. California law requires everyone's consent before a call is recorded.</span></label>
-            <label className="toggle" htmlFor="democaller"><input type="checkbox" id="democaller" checked={demoCaller} onChange={(e) => setDemoCaller(e.target.checked)} /><span><b>Demo caller</b> · play the pre-recorded caller lines (synthesized from the founder's own voice) instead of using the microphone. Maya's and Nora's replies stay live.</span></label>
+            <label className="toggle" htmlFor="democaller"><input type="checkbox" id="democaller" checked={demoCaller} onChange={(e) => setDemoCaller(e.target.checked)} /><span><b>Demo caller</b> · play the pre-recorded caller lines (synthesized with a stock ElevenLabs voice) instead of using the microphone. Maya's and Nora's replies stay live.</span></label>
             <div className="row-btns"><button className="btn ghost" type="button" onClick={() => setScreen('intake')}>Edit details</button><button className="btn" type="button" disabled={!consent} onClick={startLive}>Start voice session</button></div>
           </div></section>
         )}

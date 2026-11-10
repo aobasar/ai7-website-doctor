@@ -3,7 +3,9 @@
 import fs from 'node:fs';
 const KEY = process.env.ELEVENLABS_API_KEY, D = 'AOB/video/pres';
 const TL = JSON.parse(fs.readFileSync(`${D}/timeline.json`, 'utf8'));
+const ONLY = process.argv[2]; // optional: one scene id, e.g. s4b
 for (const s of TL) {
+  if (ONLY && s.id !== ONLY) continue;
   const fd = new FormData();
   fd.append('model_id', 'scribe_v1');
   fd.append('file', new Blob([fs.readFileSync(`${D}/${s.audio}`)]), s.audio);
