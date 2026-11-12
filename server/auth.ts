@@ -19,10 +19,11 @@ const FAIL_DELAY_MS = 800;
 
 const USER = process.env.APP_USER || '';
 const PASS_HASH = process.env.APP_PASS_HASH || '';
-// Hackathon judging: the login form comes prefilled so judges only click Sign in,
-// and a second spelling of the demo password is accepted.
-const PREFILL_PASS = 'sdxsdsu8';
-const EXTRA_HASHES = ['scrypt$62b098d8a85ee7400797e442af53db27$9f8fda03b6d2f13ae8594c8e349f5696d50a834c7dd035c136dee23e8779c1be'];
+// Optional, for a judged demo: APP_PREFILL_PASS fills the password field so judges only click Sign in,
+// and APP_EXTRA_PASS_HASHES (comma-separated scrypt hashes) accepts other spellings of the demo password.
+// Neither is set by default; no password or password hash lives in the repo.
+const PREFILL_PASS = process.env.APP_PREFILL_PASS || '';
+const EXTRA_HASHES = (process.env.APP_EXTRA_PASS_HASHES || '').split(',').map((h) => h.trim()).filter(Boolean);
 export const authEnabled = Boolean(USER && PASS_HASH);
 
 // Signing key derived from server-side secrets that already exist; rotating them logs everyone out.
@@ -100,10 +101,10 @@ button{font:inherit;font-weight:700;border:0;border-radius:12px;padding:12px;bac
 .err{color:var(--bad);font-size:.88rem}
 </style></head><body>
 <form method="post" action="/login" autocomplete="on">
-<h1>Website Doctor</h1><p style="margin-top:-8px">by AI7 Tech Support</p><p>Demo login is prefilled. Just click Sign in.</p>
+<h1>Website Doctor</h1><p style="margin-top:-8px">by AI7 Tech Support</p>${PREFILL_PASS ? '<p>Demo login is prefilled. Just click Sign in.</p>' : ''}
 ${error ? `<div class="err" role="alert">${esc(error)}</div>` : ''}
 <label for="u">Username<input id="u" name="username" autocomplete="username" value="${esc(USER)}" required></label>
-<label for="p">Password<input id="p" name="password" type="password" autocomplete="current-password" value="${esc(PREFILL_PASS)}" required></label>
+<label for="p">Password<input id="p" name="password" type="password" autocomplete="current-password" ${PREFILL_PASS ? `value="${esc(PREFILL_PASS)}"` : ''} required></label>
 <button type="submit">Sign in</button>
 <p>You stay signed in on this device for 30 days.</p>
 </form></body></html>`;

@@ -95,6 +95,7 @@ The hosted demo ran (and can run again) from the `Dockerfile` on a Coolify serve
 | `DAYTONA_API_KEY`, `DAYTONA_API_URL`, `DAYTONA_TARGET` | Daytona sandboxes |
 | `LAB_SANDBOX_ID` | reuse one long-lived lab sandbox (auto-stop disabled) instead of booting a new one |
 | `APP_USER`, `APP_PASS_HASH` | login gate (`scrypt$salt$hash`); without them the gate is off |
+| `APP_PREFILL_PASS`, `APP_EXTRA_PASS_HASHES` | optional, for judged demos: prefill the password field; accept extra password spellings (comma-separated scrypt hashes). Off by default |
 
 The login gate (`server/auth.ts`) has per-IP and per-user lockout, a fixed delay on failed attempts, timing-safe comparisons and an HMAC-signed HttpOnly session cookie that lasts 30 days. During judging, the login form came prefilled.
 
